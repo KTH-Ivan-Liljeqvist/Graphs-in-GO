@@ -86,19 +86,15 @@ func getLargestSizeAndNumOfComponents(g Grapher) (largest_component_size, number
 /*
 	Takes in a boolean - either creates a hash or matrix.
     Takes in n - number of edges and verticies.
-    Returns a Grapher object with n verticies and n random edges.
+    Returns two Grapher object - one matrix and one hash.
+    The vertices in the graphs returned are conencted exactly the same.
 */
 
-func setupGraph(use_hash bool, n int) (graph_to_return Grapher) {
+func setupGraphs(n int) (hash_graph_to_return Grapher, matrix_graph_to_return Grapher) {
 
-	graph_to_return = nil
-
-	//create a matrix or a hash
-	if use_hash {
-		graph_to_return = graph.NewHash(n)
-	} else {
-		graph_to_return = graph.NewMatrix(n)
-	}
+	//create empty graphs
+	hash_graph_to_return = graph.NewHash(n)
+	matrix_graph_to_return = graph.NewMatrix(n)
 
 	//init randomness
 	random := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -110,8 +106,12 @@ func setupGraph(use_hash bool, n int) (graph_to_return Grapher) {
 		to := random.Intn(n)
 
 		//only insert if edge doesn't exist
-		if !graph_to_return.HasEdge(from, to) {
-			graph_to_return.Add(from, to)
+		if !hash_graph_to_return.HasEdge(from, to) && !matrix_graph_to_return.HasEdge(from, to) {
+
+			//connect both graphs in the same way
+			hash_graph_to_return.Add(from, to)
+			matrix_graph_to_return.Add(from, to)
+
 			count++
 		}
 
@@ -153,11 +153,10 @@ func runDFS(g Grapher) {
 */
 
 func analyzeGraphInfo(n int) {
-	//make hash graph.
-	//the first parameter indicated if hash (true) or matrix (false)
-	hashGraph := setupGraph(true, n)
-	//make matrix graph
-	matrixGraph := setupGraph(false, n)
+
+	//generate the graphs.
+	//the vertices are connected in the same way in both
+	hashGraph, matrixGraph := setupGraphs(n)
 
 	//get graph info
 	largest_component_size_hash, number_of_components_hash := getLargestSizeAndNumOfComponents(hashGraph)
@@ -187,8 +186,7 @@ func analyzeGraphPerformance(graph_sizes []int) {
 
 		fmt.Println("TESTING GRAPH SIZE: ", size)
 
-		hashGraph := setupGraph(true, size)
-		matrixGraph := setupGraph(false, size)
+		hashGraph, matrixGraph := setupGraphs(size)
 
 		//ANALYZE HASH
 		//remember time

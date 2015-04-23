@@ -39,7 +39,7 @@ var NewFuncs = map[string]func(int) Grapher{
 	"Hash": func(n int) Grapher { return NewHash(n) },
 
 	//test the matrix version
-	"Matrix": func(n int) Grapher { return NewMatrix(n) },
+	//"Matrix": func(n int) Grapher { return NewMatrix(n) },
 }
 
 // Constructs test graphs using the factory method f.

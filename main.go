@@ -226,6 +226,6 @@ func main() {
 	fmt.Println("------------------")
 
 	//analyze performace with different graph sizes
-	graph_sizes_to_analyze := []int{3, 100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000}
+	graph_sizes_to_analyze := []int{10, 100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000}
 	analyzeGraphPerformance(graph_sizes_to_analyze)
 }
